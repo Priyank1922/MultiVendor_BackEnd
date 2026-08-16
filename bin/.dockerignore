@@ -1,0 +1,9 @@
+.git
+.mvn
+src
+.classpath
+.project
+.settings
+*.log
+.DS_Store
+README.md

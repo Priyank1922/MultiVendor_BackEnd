@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.Ecommerce.ClassDto.CategoryDTO;
 import com.example.Ecommerce.service.CategoryService;
-@CrossOrigin(origins = "*") 
+@CrossOrigin(origins = "https://multi-vendor-front-end-five.vercel.app")
 @RestController
 @RequestMapping("/category")
 public class CategoryController {

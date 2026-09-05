@@ -31,6 +31,13 @@ public class Carts {
     private Long id;
     @Column(nullable = false)
     private Boolean deleted = false;
+
+    @PrePersist
+    public void prePersist() {
+        if (deleted == null) {
+            deleted = false;
+        }
+    }
     @OneToOne
     @JoinColumn(name = "customer_id")
 

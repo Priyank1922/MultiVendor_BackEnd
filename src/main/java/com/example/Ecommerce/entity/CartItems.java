@@ -27,6 +27,13 @@ public class CartItems {
     private Long id;
     private Boolean  deleted = false;
 
+    @PrePersist
+    public void prePersist() {
+        if (deleted == null) {
+            deleted = false;
+        }
+    }
+
     @Positive(message = "Quantity must be greater than zero")
     private Integer quantity;
 

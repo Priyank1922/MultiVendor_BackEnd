@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.Ecommerce.ClassDto.CustomerDTO;
 import com.example.Ecommerce.service.CustomerService;
-@CrossOrigin(origins = "https://multi-vendor-front-end-five.vercel.app")
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -16,7 +18,14 @@ public class CustomerController {
     @Autowired
     private CustomerService service;
 
-    // Save
+    // Login
+    @PostMapping("/login")
+    public ResponseEntity<CustomerDTO> login(@RequestBody CustomerDTO loginDto) {
+        CustomerDTO customer = service.login(loginDto.getEmail(), loginDto.getPassword());
+        return ResponseEntity.ok(customer);
+    }
+
+    // Save / Register
     @PostMapping
     public CustomerDTO save(@RequestBody CustomerDTO dto) {
         return service.save(dto);

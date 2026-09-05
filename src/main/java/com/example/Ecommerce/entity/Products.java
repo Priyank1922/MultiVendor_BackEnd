@@ -44,6 +44,13 @@ public class Products  {
 
     @Column(nullable = false)
     private Boolean deleted = false;
+
+    @jakarta.persistence.PrePersist
+    public void prePersist() {
+        if (deleted == null) {
+            deleted = false;
+        }
+    }
     @NotBlank(message = "Product name is required")
     @Size(min = 3, max = 100, message = "Product name must be between 3 and 100 characters")
     @Column(nullable = false)

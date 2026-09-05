@@ -26,44 +26,61 @@ public class CustomerService {
     // ================= Entity -> DTO =================
 
     public CustomerDTO convertToDTO(Customers customer) {
-
         CustomerDTO dto = new CustomerDTO();
-
         dto.setId(customer.getId());
         dto.setName(customer.getName());
         dto.setEmail(customer.getEmail());
         dto.setPassword(customer.getPassword());
         dto.setPhone(customer.getPhone());
         dto.setAddress(customer.getAddress());
-
         return dto;
     }
 
     // ================= DTO -> Entity =================
 
     public Customers convertToEntity(CustomerDTO dto) {
-
         Customers customer = new Customers();
-
         customer.setId(dto.getId());
         customer.setName(dto.getName());
         customer.setEmail(dto.getEmail());
         customer.setPassword(dto.getPassword());
         customer.setPhone(dto.getPhone());
         customer.setAddress(dto.getAddress());
-
         return customer;
     }
 
-    // ================= Save =================
+    // ================= Login =================
+
+    public CustomerDTO login(String email, String password) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required for sign in.");
+        }
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password is required for sign in.");
+        }
+
+        Customers customer = repo.findByEmail(email.trim().toLowerCase())
+                .orElseThrow(() -> new ResourceNotFoundException("No account found registered with email: " + email.trim()));
+
+        if (!customer.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Incorrect password. Please verify and try again.");
+        }
+
+        return convertToDTO(customer);
+    }
+
+    // ================= Save / Register =================
 
     @CacheEvict(value = "CustomerService", allEntries = true)
     public CustomerDTO save(CustomerDTO dto) {
-
+        if (dto.getEmail() != null) {
+            dto.setEmail(dto.getEmail().trim().toLowerCase());
+            if (repo.existsByEmail(dto.getEmail())) {
+                throw new IllegalArgumentException("An account with this email (" + dto.getEmail() + ") already exists.");
+            }
+        }
         Customers customer = convertToEntity(dto);
-
         Customers savedCustomer = repo.save(customer);
-
         return convertToDTO(savedCustomer);
     }
 
@@ -71,17 +88,11 @@ public class CustomerService {
 
     @Cacheable("CustomerService")
     public List<CustomerDTO> getAll() {
-
         List<Customers> customers = repo.findAll();
-
         List<CustomerDTO> dtoList = new ArrayList<>();
-
         for (Customers customer : customers) {
-
             dtoList.add(convertToDTO(customer));
-
         }
-
         return dtoList;
     }
 
@@ -89,10 +100,8 @@ public class CustomerService {
 
     @Cacheable(value = "CustomerService", key = "#id")
     public CustomerDTO getById(Long id) {
-
         Customers customer = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer Not Found : " + id));
-
         return convertToDTO(customer);
     }
 
@@ -100,7 +109,6 @@ public class CustomerService {
 
     @CacheEvict(value = "CustomerService", allEntries = true)
     public CustomerDTO update(Long id, CustomerDTO dto) {
-
         Customers customer = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer Not Found : " + id));
 
@@ -111,7 +119,6 @@ public class CustomerService {
         customer.setAddress(dto.getAddress());
 
         Customers updatedCustomer = repo.save(customer);
-
         return convertToDTO(updatedCustomer);
     }
 
@@ -119,43 +126,29 @@ public class CustomerService {
 
     @CacheEvict(value = "CustomerService", allEntries = true)
     public String delete(Long id) {
-
         repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer Not Found : " + id));
-
         repo.deleteById(id);
-
         return "Customer Deleted Successfully";
     }
 
     // ================= Sorting =================
 
-	@Cacheable(value = "customers", key = "#field")
-
+    @Cacheable(value = "customers", key = "#field")
     public List<CustomerDTO> sorting(String field) {
-
         List<Customers> customers = repo.findAll(Sort.by(field));
-
         List<CustomerDTO> dtoList = new ArrayList<>();
-
         for (Customers customer : customers) {
-
             dtoList.add(convertToDTO(customer));
-
         }
-
         return dtoList;
     }
 
     // ================= Pagination =================
 
     public Page<CustomerDTO> getAll(int page, int size) {
-
         Pageable pageable = PageRequest.of(page, size);
-
         Page<Customers> customerPage = repo.findAll(pageable);
-
         return customerPage.map(this::convertToDTO);
     }
-
 }

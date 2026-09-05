@@ -8,9 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -23,16 +21,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE Orders SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE orders SET deleted = true WHERE id=?")
 @SQLRestriction("deleted = false")
-
 public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Boolean deleted = false;
+
     @NotNull
     private LocalDate orderDate;
 
@@ -41,13 +40,19 @@ public class Orders {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-
-
     private Customers customer;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     @JsonIgnore
-
     private List<OrderItems> orderItems = new ArrayList<>();
 
+    @PrePersist
+    public void prePersist() {
+        if (deleted == null) {
+            deleted = false;
+        }
+        if (orderDate == null) {
+            orderDate = LocalDate.now();
+        }
+    }
 }

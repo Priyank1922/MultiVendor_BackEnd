@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.Ecommerce.ClassDto.CartItemDTO;
 import com.example.Ecommerce.service.CartItemService;
-@CrossOrigin(origins = "https://multi-vendor-front-end-five.vercel.app")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/cartitem")
 public class CartItemController {

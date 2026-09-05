@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE Customers SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE customers SET deleted = true WHERE id=?")
 @SQLRestriction("deleted=false")
 public class Customers {
 
@@ -32,6 +32,13 @@ public class Customers {
     private Long id;
     @Column(nullable = false)
     private Boolean deleted = false;
+
+    @PrePersist
+    public void prePersist() {
+        if (deleted == null) {
+            deleted = false;
+        }
+    }
     @NotBlank(message = "Customer name is required")
     @Size(min = 3, max = 50)
     @Column(nullable = false)

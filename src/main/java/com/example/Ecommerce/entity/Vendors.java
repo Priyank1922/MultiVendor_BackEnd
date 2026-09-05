@@ -42,6 +42,13 @@ public class Vendors {
     @Column(nullable = false)
     private Boolean deleted = false;
 
+    @jakarta.persistence.PrePersist
+    public void prePersist() {
+        if (deleted == null) {
+            deleted = false;
+        }
+    }
+
     @NotBlank(message = "Vendor name is required")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     @Column(nullable = false)

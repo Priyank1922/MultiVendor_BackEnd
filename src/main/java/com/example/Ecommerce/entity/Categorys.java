@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE Categorys SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE categorys SET deleted = true WHERE id=?")
 @SQLRestriction("deleted = false")
 
 public class Categorys {
@@ -39,6 +39,13 @@ public class Categorys {
    
     @Column(nullable = false)
     private Boolean deleted = false;
+    
+    @jakarta.persistence.PrePersist
+    public void prePersist() {
+        if (deleted == null) {
+            deleted = false;
+        }
+    }
     
     @NotBlank(message = "Category name is required")
     @Size(min = 3, max = 50, message = "Category name must be between 3 and 50 characters")

@@ -118,10 +118,6 @@ public class CartItemService {
 
 	}
 
-
-	
-	
-	
 	@Cacheable(value = "CartltemService")
 	public List<CartItemDTO> getAll() {
 
@@ -139,11 +135,6 @@ public class CartItemService {
 
 	}
 
-
-	
-	
-	
-	
 	@Cacheable(value = "CartltemService", key = "#id")
 	public CartItemDTO getById(Long id) {
 
@@ -153,11 +144,6 @@ public class CartItemService {
 		return convertToDTO(item);
 
 	}
-	
-	
-	
-	
-	
 
 	@CacheEvict(value = "CartltemService", allEntries = true)
 	public CartItemDTO update(Long id, CartItemDTO dto) {
@@ -186,11 +172,8 @@ public class CartItemService {
 		CartItems updated = repo.save(cartItem);
 
 		return convertToDTO(updated);
-		
-		
+
 	}
-	
-	
 
 	@CacheEvict(value = "CartltemService", allEntries = true)
 	public String delete(Long id) {

@@ -1,26 +1,50 @@
 package com.example.Ecommerce.ClassDto;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-	import java.math.BigDecimal;
-	import java.time.LocalDate;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrdersDTO {
 
-	import lombok.AllArgsConstructor;
-	import lombok.Data;
-	import lombok.NoArgsConstructor;
+    private Long id;
+    private LocalDate orderDate;
+    private BigDecimal totalAmount;
+    private Long customerId;
 
-	@Data
-	
-	public class OrdersDTO {
+    public Long getId() {
+        return id;
+    }
 
-	    private Long id;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
 
-	    private LocalDate orderDate;
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
+    }
 
-	    private BigDecimal totalAmount;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
 
-	    private Long customerId;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
-	}
+    public Long getCustomerId() {
+        return customerId;
+    }
 
-
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+}

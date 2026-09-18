@@ -1,4 +1,3 @@
-
 package com.example.Ecommerce.service;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.Ecommerce.ClassDto.*;
+import com.example.Ecommerce.ClassDto.ProductDTO;
 import com.example.Ecommerce.entity.Categorys;
 import com.example.Ecommerce.entity.Products;
 import com.example.Ecommerce.entity.Vendors;
@@ -36,14 +35,13 @@ public class ProductService {
 
 	// SAVE
 	@CacheEvict(value = "ProductService", allEntries = true)
-
 	public ProductDTO save(ProductDTO dto) {
 
 		Categorys category = categoryRepo.findById(dto.getCategoryId())
-				.orElseThrow(() -> new ResourceNotFoundException("Category Not Found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Category Not Found : " + dto.getCategoryId()));
 
 		Vendors vendor = vendorRepo.findById(dto.getVendorId())
-				.orElseThrow(() -> new ResourceNotFoundException("Vendor Not Found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Vendor Not Found : " + dto.getVendorId()));
 
 		Products product = new Products();
 
@@ -62,7 +60,6 @@ public class ProductService {
 	// GET ALL
 	@Cacheable("ProductService")
 	public List<ProductDTO> getAll() {
-
 		return repo.findAll().stream().map(this::convertToDTO).toList();
 	}
 
@@ -80,53 +77,53 @@ public class ProductService {
 	@CacheEvict(value = "ProductService", allEntries = true)
 	public ProductDTO update(Long id, ProductDTO dto) {
 
-	    Products product = repo.findById(id)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product Not Found : " + id));
+		Products product = repo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Product Not Found : " + id));
 
-	    product.setName(dto.getName());
-	    product.setDescription(dto.getDescription());
-	    product.setPrice(dto.getPrice());
-	    product.setStock(dto.getStock());
+		product.setName(dto.getName());
+		product.setDescription(dto.getDescription());
+		product.setPrice(dto.getPrice());
+		product.setStock(dto.getStock());
 
-	    if (dto.getCategoryId() != null) {
-	        Categorys category = categoryRepo.findById(dto.getCategoryId())
-	                .orElseThrow(() -> new ResourceNotFoundException("Category Not Found"));
-	        product.setCategory(category);
-	    }
+		if (dto.getCategoryId() != null) {
+			Categorys category = categoryRepo.findById(dto.getCategoryId())
+					.orElseThrow(() -> new ResourceNotFoundException("Category Not Found : " + dto.getCategoryId()));
+			product.setCategory(category);
+		}
 
-	    if (dto.getVendorId() != null) {
-	        Vendors vendor = vendorRepo.findById(dto.getVendorId())
-	                .orElseThrow(() -> new ResourceNotFoundException("Vendor Not Found"));
-	        product.setVendor(vendor);
-	    }
+		if (dto.getVendorId() != null) {
+			Vendors vendor = vendorRepo.findById(dto.getVendorId())
+					.orElseThrow(() -> new ResourceNotFoundException("Vendor Not Found : " + dto.getVendorId()));
+			product.setVendor(vendor);
+		}
 
-	    Products updated = repo.save(product);
+		Products updated = repo.save(product);
 
-	    return convertToDTO(updated);
-	} 
+		return convertToDTO(updated);
+	}
 
 	@CacheEvict(value = "ProductService", allEntries = true)
 	public String delete(Long id) {
+
+		repo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Product Not Found : " + id));
 
 		repo.deleteById(id);
 
 		return "Product Deleted Successfully";
 	}
-	
-	
 
 	public Page<ProductDTO> getAll(int page, int size) {
 
-	    Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size);
 
-	    Page<Products> products = repo.findAll(pageable);
+		Page<Products> products = repo.findAll(pageable);
 
-	    return products.map(this::convertToDTO);
+		return products.map(this::convertToDTO);
 	}
 
 	// SORTING
 	@Cacheable(value = "products", key = "#field")
-
 	public List<ProductDTO> sorting(String field) {
 
 		List<Products> products = repo.findAll(Sort.by(field));
@@ -140,12 +137,10 @@ public class ProductService {
 		return dtoList;
 	}
 
-	
 	// SEARCH
 	public List<ProductDTO> search(String name) {
 
 		List<Products> products = repo.findByNameContainingIgnoreCase(name);
-		  
 
 		List<ProductDTO> dtoList = new ArrayList<>();
 
@@ -158,20 +153,24 @@ public class ProductService {
 
 	private ProductDTO convertToDTO(Products product) {
 
-	    ProductDTO dto = new ProductDTO();
+		ProductDTO dto = new ProductDTO();
 
-	    dto.setId(product.getId());
-	    dto.setName(product.getName());
-	    dto.setDescription(product.getDescription());
-	    dto.setPrice(product.getPrice());
-	    dto.setStock(product.getStock());
+		dto.setId(product.getId());
+		dto.setName(product.getName());
+		dto.setDescription(product.getDescription());
+		dto.setPrice(product.getPrice());
+		dto.setStock(product.getStock());
 
-	    dto.setCategoryId(product.getCategory().getId());
-	    dto.setCategoryName(product.getCategory().getName());
+		if (product.getCategory() != null) {
+			dto.setCategoryId(product.getCategory().getId());
+			dto.setCategoryName(product.getCategory().getName());
+		}
 
-	    dto.setVendorId(product.getVendor().getId());
-	    dto.setVendorName(product.getVendor().getName());
+		if (product.getVendor() != null) {
+			dto.setVendorId(product.getVendor().getId());
+			dto.setVendorName(product.getVendor().getName());
+		}
 
-	    return dto;
+		return dto;
 	}
 }

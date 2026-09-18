@@ -1,27 +1,66 @@
 package com.example.Ecommerce.ClassDto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class VendorDTO {
 
-	import lombok.AllArgsConstructor;
-	import lombok.Data;
-	import lombok.NoArgsConstructor;
+    private Long id;
+    private String name;
+    private String companyName;
+    private String email;
+    private String phone;
+    private String address;
 
-	@Data
-	
-	public class VendorDTO {
+    public Long getId() {
+        return id;
+    }
 
-	    private Long id;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public String getName() {
+        return name;
+    }
 
-	    private String name;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	    private String companyName;
+    public String getCompanyName() {
+        return companyName;
+    }
 
-	    private String email;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
-	    private String phone;
+    public String getEmail() {
+        return email;
+    }
 
-	    private String address;
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	}
+    public String getPhone() {
+        return phone;
+    }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+}

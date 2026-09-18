@@ -57,6 +57,7 @@ public class VendorService {
 
     // ================= Save =================
 
+    @CacheEvict(value = "VendorService", allEntries = true)
     public VendorDTO save(VendorDTO dto) {
 
         Vendors vendor = convertToEntity(dto);
@@ -92,9 +93,7 @@ public class VendorService {
         Vendors vendor = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor Not Found : " + id));
 
-        VendorDTO dto = convertToDTO(vendor);
-
-        return dto;
+        return convertToDTO(vendor);
     }
 
     // ================= Update =================
@@ -131,8 +130,7 @@ public class VendorService {
 
     // ================= Sorting =================
 
-	@Cacheable(value = "vendors", key = "#field")
-
+    @Cacheable(value = "vendors", key = "#field")
     public List<VendorDTO> sorting(String field) {
 
         List<Vendors> vendors = repo.findAll(Sort.by(field));

@@ -1,23 +1,48 @@
 package com.example.Ecommerce.ClassDto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CartItemDTO {
 
-	import lombok.AllArgsConstructor;
-	import lombok.Data;
-	import lombok.NoArgsConstructor;
+    private Long id;
+    private Integer quantity;
+    private Long cartId;
+    private Long productId;
 
-	@Data
-	
-	public class CartItemDTO {
+    public Long getId() {
+        return id;
+    }
 
-	    private Long id;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
 
-	    private Integer quantity;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
-	    private Long cartId;
+    public Long getCartId() {
+        return cartId;
+    }
 
-	    private Long productId;
+    public void setCartId(Long cartId) {
+        this.cartId = cartId;
+    }
 
-	}
+    public Long getProductId() {
+        return productId;
+    }
 
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+}

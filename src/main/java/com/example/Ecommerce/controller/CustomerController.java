@@ -15,60 +15,58 @@ import com.example.Ecommerce.service.CustomerService;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    @Autowired
-    private CustomerService service;
+	@Autowired
+	private CustomerService service;
 
-    // Login
-    @PostMapping("/login")
-    public ResponseEntity<CustomerDTO> login(@RequestBody CustomerDTO loginDto) {
-        CustomerDTO customer = service.login(loginDto.getEmail(), loginDto.getPassword());
-        return ResponseEntity.ok(customer);
-    }
+	// Login
+	@PostMapping("/login")
+	public ResponseEntity<CustomerDTO> login(@RequestBody CustomerDTO loginDto) {
+		CustomerDTO customer = service.login(loginDto.getEmail(), loginDto.getPassword());
+		return ResponseEntity.ok(customer);
+	}
 
-    // Save / Register
-    @PostMapping
-    public CustomerDTO save(@RequestBody CustomerDTO dto) {
-        return service.save(dto);
-    }
+	// Save / Register
+	@PostMapping
+	public CustomerDTO save(@RequestBody CustomerDTO dto) {
+		return service.save(dto);
+	}
 
-    // Get All
-    @GetMapping
-    public List<CustomerDTO> getAll() {
-        return service.getAll();
-    }
+	// Get All
+	@GetMapping
+	public List<CustomerDTO> getAll() {
+		return service.getAll();
+	}
 
-    // Get By Id
-    @GetMapping("/{id}")
-    public CustomerDTO getById(@PathVariable Long id) {
-        return service.getById(id);
-    }
+	// Get By Id
+	@GetMapping("/{id}")
+	public CustomerDTO getById(@PathVariable Long id) {
+		return service.getById(id);
+	}
 
-    // Update
-    @PutMapping("/{id}")
-    public CustomerDTO update(@PathVariable Long id,
-                              @RequestBody CustomerDTO dto) {
-        return service.update(id, dto);
-    }
+	// Update
+	@PutMapping("/{id}")
+	public CustomerDTO update(@PathVariable Long id, @RequestBody CustomerDTO dto) {
+		return service.update(id, dto);
+	}
 
-    // Delete
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        return service.delete(id);
-    }
+	// Delete
+	@DeleteMapping("/{id}")
+	public String delete(@PathVariable Long id) {
+		return service.delete(id);
+	}
 
-    // Sorting
-    @GetMapping("/sort/{field}")
-    public List<CustomerDTO> sorting(@PathVariable String field) {
-        return service.sorting(field);
-    }
+	// Sorting
+	@GetMapping("/sort/{field}")
+	public List<CustomerDTO> sorting(@PathVariable String field) {
+		return service.sorting(field);
+	}
 
-    // Pagination
-    @GetMapping("/page")
-    public Page<CustomerDTO> findPage(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+	// Pagination
+	@GetMapping("/page")
+	public Page<CustomerDTO> findPage(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
 
-        return service.getAll(page, size);
-    }
+		return service.getAll(page, size);
+	}
 
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.Ecommerce.ClassDto.VendorDTO;
 import com.example.Ecommerce.service.VendorService;
-@CrossOrigin(origins = "*")
+
 @RestController
 @RequestMapping("/vendor")
 public class VendorController {
